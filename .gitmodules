@@ -1,0 +1,6 @@
+[submodule "_Build"]
+	path = _Build
+	url = https://github.com/klyte45/CS2-BuildFiles
+[submodule "WE_TFM/Commons"]
+	path = WE_TFM/Commons
+	url = https://github.com/klyte45/CS2-BelzontCommons.git

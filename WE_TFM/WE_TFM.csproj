@@ -1,0 +1,113 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <Configurations>Debug;Release</Configurations>
+    <RootNamespace>WE_TFM</RootNamespace>
+    <Bursted Condition="'$(Configuration)'=='Release'">true</Bursted>
+    <Bursted Condition="'$(Configuration)'=='Debug'">true</Bursted>
+    <DefineConstants Condition="'$(Configuration)'=='Debug'">ENABLE_EUIS;$(DefineConstants)</DefineConstants>
+    <PublishConfigurationPath>Properties\PublishConfiguration.xml</PublishConfigurationPath>
+  </PropertyGroup>
+
+  <Import Project="$([System.Environment]::GetEnvironmentVariable('CSII_TOOLPATH', 'EnvironmentVariableTarget.User'))\Mod.props" />
+  <Import Project="$([System.Environment]::GetEnvironmentVariable('CSII_TOOLPATH', 'EnvironmentVariableTarget.User'))\Mod.targets" />
+  <Import Project="$(SolutionDir)\_Build\belzont_public.targets" />
+
+  <PropertyGroup>
+    <ModId></ModId>
+    <Version>0.0.0.0</Version>
+    <Version Condition="'$(Configuration)'=='Debug'">65534.$([System.DateTime]::Now.ToString("yyyy.Mdd.HHmm"))</Version>
+    <GameVersion>1.5.*</GameVersion>
+    <ThumbnailPath>Properties/Thumbnail.png</ThumbnailPath>
+    <DisplayName>WE Transport Formula Module</DisplayName>
+    <ShortDescription>Basic formulas for public transport related modules using Write Everywhere</ShortDescription>
+    <GitHubLink>https://github.com/klyte45/CS2-WE_TFM</GitHubLink>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="Game">
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Colossal.Core">
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Colossal.OdinSerializer">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Colossal.Logging">
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Colossal.IO.AssetDatabase">
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.CoreModule">
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Unity.Burst">
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Unity.Collections">
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Unity.Entities">
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Unity.Mathematics">
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Colossal.Localization">
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Colossal.PSI.Common">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Colossal.UI.Binding">
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Unity.Mathematics">
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Colossal.Mathematics">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Colossal.UI">
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="cohtml.Net">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Colossal.AssetPipeline">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Colossal.Mono.Cecil">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.ImageConversionModule">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.AudioModule">
+      <Private>False</Private>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="System">
+      <HintPath>$(CSII_MANAGEDPATH)\System.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Update="System.Core">
+      <HintPath>$(CSII_MANAGEDPATH)\System.Core.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Update="System.Data">
+      <HintPath>$(CSII_MANAGEDPATH)\System.Data.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="mscorlib">
+      <HintPath>$(CSII_MANAGEDPATH)\mscorlib.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+  </ItemGroup>
+</Project>
