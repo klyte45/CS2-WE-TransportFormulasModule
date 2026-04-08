@@ -1,15 +1,18 @@
 <Publish>
   <ModId Value="" />
   <DisplayName Value="WE Transport Formula Module" />
-  <ShortDescription Value="Switch platform types between metro and train tracks and stops!" />
-  <LongDescription>**README**</LongDescription>
+  <ShortDescription Value="Basic formulas for public transport related modules using Write Everywhere" />
+  <LongDescription>**README**
+
+This is the WE Transport Formula Module (WE_TFM), formerly known as PlatformSwitcher. All references and code have been updated to reflect the new project name.</LongDescription>
   <Thumbnail Value="Properties/Thumbnail.png" />
   <ForumLink Value="" />
-  <ModVersion Value="0.0.0.0" />
+  <ModVersion Value="65534.2026.408.1824" />
   <GameVersion Value="1.5.*" />
-  <ChangeLog>**CHANGELOG**</ChangeLog>
-  <Tag Value="Code Mod" />
-  <Dependency Id="74417" ModVersion="" DisplayName="Unified Icon Library" />
+  <ChangeLog>**CHANGELOG**
+
+- Project renamed from PlatformSwitcher to WE_TFM (WE Transport Formula Module)
+- All namespaces, classes, and references updated accordingly</ChangeLog>
   <ExternalLink Type="github" Url="https://github.com/klyte45/CS2-WE_TFM" />
   <ExternalLink Type="youtube" Url="https://www.youtube.com/Klyte45" />
   <ExternalLink Type="kofi" Url="https://ko-fi.com/klyte45" />
