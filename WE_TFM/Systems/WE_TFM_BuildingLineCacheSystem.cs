@@ -1,15 +1,18 @@
+using Belzont.Interfaces;
 using Colossal.Entities;
 using Game.Buildings;
 using Game.Common;
 using Game.Prefabs;
 using Game.Routes;
-using WE_TFM.BridgeWE;
+using Game.UI;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Jobs;
-using Belzont.Interfaces;
+using WE_TFM.BridgeWE;
 using WE_TFM.Components.Shareable;
 
 namespace WE_TFM.Systems
@@ -18,6 +21,7 @@ namespace WE_TFM.Systems
     public partial class WE_TFM_BuildingLineCacheSystem : BelzontBasicSystem
     {
         public static WE_TFM_BuildingLineCacheSystem Instance { get; private set; }
+        private NameSystem m_nameSystem;
 
         protected override AllowedPhase UpdatePhase => AllowedPhase.Modification5;
 
@@ -25,6 +29,7 @@ namespace WE_TFM.Systems
         protected override void OnCreateWithBarrier()
         {
             Instance = this;
+            m_nameSystem = World.GetOrCreateSystemManaged<NameSystem>();
         }
 
         protected override void OnDestroy()
@@ -115,6 +120,7 @@ namespace WE_TFM.Systems
                     {
                         var descriptor = line;
                         descriptor.Acronym = WERouteFn.GetTransportLineNumber(line.Entity);
+                        descriptor.SmallName = GetSmallLineName(descriptor.Entity, descriptor.Number);
                         lineSet.Add(descriptor);
                     }
                     subJob.Lines.Dispose();
@@ -140,7 +146,56 @@ namespace WE_TFM.Systems
         }
 
 
-       
+        private string GetSmallLineName(Entity owner, int routeNumber)
+        {
+            var lineName = m_nameSystem.GetRenderedLabelName(owner).Split(' ').LastOrDefault();
+            return lineName is { Length: >= 1 and <= 3 } ? lineName : routeNumber.ToString();
+        }
+
+        /// <summary>
+        /// Gets filtered and sorted lines
+        /// </summary>
+        public List<LineDescriptor> GetFilteredLines(Entity buildingEntity, string lineType, bool iterateToOwner, bool sortDescending = false)
+        {
+            var allLines = GetLines(buildingEntity, iterateToOwner);
+
+            // Apply filtering
+            List<LineDescriptor> filtered;
+            if (lineType == "All")
+            {
+                filtered = allLines;
+            }
+            else
+            {
+                var transportTypes = ParseTransportTypes(lineType);
+                filtered = [.. allLines.Where(x => transportTypes.Contains(x.TransportType))];
+            }
+
+            // Apply sorting
+            if (sortDescending)
+            {
+                filtered = [.. filtered.OrderByDescending(x => x.Number)];
+            }
+            else
+            {
+                filtered = [.. filtered.OrderBy(x => x.Number)];
+            }
+
+            return filtered;
+        }
+        private List<TransportType> ParseTransportTypes(string lineType)
+        {
+            return [.. lineType.Split(',')
+                .Select(x => Enum.TryParse<TransportType>(x.Trim(), out var transportType) ? transportType as TransportType? : null)
+                .Where(x => x.HasValue)
+                .Select(x => x.Value)];
+        }
+        public LineDescriptor? GetLineByIndex(Entity buildingEntity, string lineType, int index, bool iterateToOwner, bool sortDescending = false)
+        {
+            var filtered = GetFilteredLines(buildingEntity, lineType, iterateToOwner, sortDescending);
+
+            return index >= 0 && index < filtered.Count ? filtered[index] : null;
+        }
 
         [BurstCompile]
         private struct ExtractLinesJob : IJob

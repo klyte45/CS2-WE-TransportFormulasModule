@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 using Unity.Collections;
 using Unity.Entities;
 
-namespace WE_TFM.Components.Shareable
+namespace [YourDll].Components.Shareable
 {
     [StructLayout(LayoutKind.Sequential)]
     public struct LineDescriptor : System.IEquatable<LineDescriptor>
