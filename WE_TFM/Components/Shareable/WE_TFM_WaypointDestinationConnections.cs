@@ -1,11 +1,13 @@
 ﻿using Colossal.Serialization.Entities;
 using Game.Prefabs;
-using WE_TFM.Enums;
 using System;
+using System.Runtime.InteropServices;
 using Unity.Entities;
+using WE_TFM.Enums;
 
-namespace WE_TFM.Components
+namespace WE_TFM.Components.Shareable
 {
+    [StructLayout(LayoutKind.Sequential)]
     public struct WE_TFM_WaypointDestinationConnections : IBufferElementData, ISerializable, IEquatable<WE_TFM_WaypointDestinationConnections>
     {
         public Entity line;
@@ -32,15 +34,15 @@ namespace WE_TFM.Components
             reader.Read(out uint version);
             if (version > CURRENT_VERSION)
             {
-                throw new System.Exception($"Unsupported version {version} for SS_WaypointDestinationConnections.");
+                throw new Exception($"Unsupported version {version} for SS_WaypointDestinationConnections.");
             }
             reader.Read(out line);
             reader.Read(out requestFrame);
             reader.Read(out int transportType);
-            this.TransportType = (TransportType)transportType;
+            TransportType = (TransportType)transportType;
             reader.Read(out isCargo);
             reader.Read(out isPassenger);
-            Importance = this.TransportType.ToImportance();
+            Importance = TransportType.ToImportance();
         }
 
         public void Serialize<TWriter>(TWriter writer) where TWriter : IWriter

@@ -15,6 +15,8 @@ using Unity.Burst.Intrinsics;
 using Unity.Entities;
 using Unity.Mathematics;
 using Belzont.Interfaces;
+using WE_TFM.Components.Shareable;
+using WE_TFM.Enums;
 
 namespace WE_TFM.Formulas
 {
@@ -29,7 +31,7 @@ namespace WE_TFM.Formulas
 
         public override int GetUpdateInterval(SystemUpdatePhase phase) => 2;
 
-        public WE_TFM_VehicleIncomingDetailData GetTvInformation(Entity platform)
+        public WE_TFM_VehicleIncomingDetailData GetIncomingDetailInformation(Entity platform)
         {
             EntityManager.TryGetComponent(platform, out WE_TFM_VehicleIncomingOrderData vehicleData);
             if (vehicleData.nextVehicle0 == Entity.Null)
@@ -136,17 +138,6 @@ namespace WE_TFM.Formulas
                     m_curveLookup = GetComponentLookup<Curve>(true)
                 }.ScheduleParallel(m_dirtyTvInfoVehicles, Dependency).Complete();
             }
-        }
-
-        public enum VehicleStatusDescription
-        {
-            TrainOnPlatform,
-            BoardingNow,
-            PrepareForBoarding,
-            NextTrain,
-            DistanceToStation,
-            AverageWaitTime,
-            ClosedPlatform
         }
 
         [BurstCompile]

@@ -6,6 +6,7 @@ using Unity.Burst;
 using Unity.Burst.Intrinsics;
 using Unity.Entities;
 using Belzont.Interfaces;
+using WE_TFM.Components.Shareable;
 
 namespace WE_TFM.Systems
 {

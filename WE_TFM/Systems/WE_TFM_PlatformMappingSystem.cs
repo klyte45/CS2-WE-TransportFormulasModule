@@ -19,6 +19,7 @@ using UnityEngine;
 using Transform = Game.Objects.Transform;
 using TransportStop = Game.Routes.TransportStop;
 using Belzont.Interfaces;
+using WE_TFM.Components.Shareable;
 
 public partial class WE_TFM_PlatformMappingSystem : BelzontBasicSystem
 {

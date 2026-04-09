@@ -16,6 +16,7 @@ using Unity.Collections;
 using Unity.Entities;
 using Unity.Jobs;
 using Belzont.Interfaces;
+using WE_TFM.Enums;
 
 namespace WE_TFM.Systems
 {

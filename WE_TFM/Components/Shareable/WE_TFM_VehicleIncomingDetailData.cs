@@ -1,10 +1,12 @@
 ﻿using Colossal.Serialization.Entities;
-using WE_TFM.Formulas;
+using System.Runtime.InteropServices;
 using Unity.Entities;
-using static WE_TFM.Formulas.WE_TFM_IncomingVehicleSystem;
+using WE_TFM.Enums;
+using WE_TFM.Formulas;
 
-namespace WE_TFM.Components
+namespace WE_TFM.Components.Shareable
 {
+    [StructLayout(LayoutKind.Sequential)]
     public struct WE_TFM_VehicleIncomingDetailData : IComponentData, ISerializable
     {
         public VehicleStatusDescription title;

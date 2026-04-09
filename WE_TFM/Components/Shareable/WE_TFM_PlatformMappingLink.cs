@@ -1,8 +1,10 @@
-﻿using Unity.Entities;
+﻿using System.Runtime.InteropServices;
+using Unity.Entities;
 using Unity.Mathematics;
 
-namespace WE_TFM.Components
+namespace WE_TFM.Components.Shareable
 {
+    [StructLayout(LayoutKind.Sequential)]
     public struct WE_TFM_PlatformMappingLink(Entity platformData, float3 absolutePos, float3 relativePos, bool isBasePlatform) : IBufferElementData
     {
         public Entity platformData = platformData;

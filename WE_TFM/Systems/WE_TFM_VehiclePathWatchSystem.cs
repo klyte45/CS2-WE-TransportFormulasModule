@@ -12,7 +12,7 @@ using Unity.Burst.Intrinsics;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Jobs;
-using WE_TFM.Components;
+using WE_TFM.Components.Shareable;
 
 namespace WE_TFM.Systems
 {

@@ -10,94 +10,10 @@ using Unity.Collections;
 using Unity.Entities;
 using Unity.Jobs;
 using Belzont.Interfaces;
+using WE_TFM.Components.Shareable;
 
 namespace WE_TFM.Systems
 {
-    public struct LineDescriptor : System.IEquatable<LineDescriptor>
-    {
-        public Entity Entity;
-        public TransportType TransportType;
-        public bool IsCargo;
-        public bool IsPassenger;
-        public FixedString32Bytes Acronym;
-        public int Number;
-        public UnityEngine.Color Color;
-
-        public LineDescriptor(
-            Entity entity,
-            TransportType transportType,
-            bool isCargo,
-            bool isPassenger,
-            FixedString32Bytes acronym,
-            int number,
-            UnityEngine.Color color)
-        {
-            Entity = entity;
-            TransportType = transportType;
-            IsCargo = isCargo;
-            IsPassenger = isPassenger;
-            Acronym = acronym;
-            Number = number;
-            Color = color;
-        }
-
-        public bool Equals(LineDescriptor other)
-        {
-            return Entity.Equals(other.Entity);
-        }
-
-        public override bool Equals(object obj)
-        {
-            return obj is LineDescriptor other && Equals(other);
-        }
-
-        public override int GetHashCode()
-        {
-            return Entity.GetHashCode();
-        }
-    }
-
-    [BurstCompile]
-    public struct ExtractLinesJob : IJob
-    {
-        [ReadOnly] public EntityManager EntityManager;
-        [ReadOnly] public Entity SelectedEntity;
-        public NativeList<LineDescriptor> Lines;
-
-        public void Execute()
-        {
-            if (EntityManager.TryGetBuffer(SelectedEntity, true, out DynamicBuffer<ConnectedRoute> routes))
-            {
-                for (int i = 0; i < routes.Length; i++)
-                {
-                    var route = routes[i];
-                    if (EntityManager.TryGetComponent<Owner>(route.m_Waypoint, out var owner)
-                        && EntityManager.TryGetComponent<PrefabRef>(owner.m_Owner, out var prefabRef)
-                        && EntityManager.TryGetComponent<TransportLineData>(prefabRef.m_Prefab, out var lineData)
-                        && EntityManager.TryGetComponent<Game.Routes.Color>(owner.m_Owner, out var lineColor)
-                        && EntityManager.TryGetComponent<RouteNumber>(owner.m_Owner, out var lineNumber))
-                    {
-                        // Get line acronym - this needs to be done outside burst since it calls managed code
-                        var acronym = new FixedString32Bytes();
-                        // For now, we'll leave acronym empty in burst context
-                        // The acronym will need to be resolved outside of burst
-
-                        var descriptor = new LineDescriptor(
-                            owner.m_Owner,
-                            lineData.m_TransportType,
-                            lineData.m_CargoTransport,
-                            lineData.m_PassengerTransport,
-                            acronym,
-                            lineNumber.m_Number,
-                            lineColor.m_Color
-                        );
-
-                        Lines.Add(descriptor);
-                    }
-                }
-            }
-        }
-    }
 
     public partial class WE_TFM_BuildingLineCacheSystem : BelzontBasicSystem
     {
@@ -221,6 +137,51 @@ namespace WE_TFM.Systems
             var lineNumberList = new List<LineDescriptor>(lineSet);
             m_buildingCacheData[selectedEntity] = (lineNumberList, UnityEngine.Time.frameCount);
             return lineNumberList;
+        }
+
+
+       
+
+        [BurstCompile]
+        private struct ExtractLinesJob : IJob
+        {
+            [ReadOnly] public EntityManager EntityManager;
+            [ReadOnly] public Entity SelectedEntity;
+            public NativeList<LineDescriptor> Lines;
+
+            public void Execute()
+            {
+                if (EntityManager.TryGetBuffer(SelectedEntity, true, out DynamicBuffer<ConnectedRoute> routes))
+                {
+                    for (int i = 0; i < routes.Length; i++)
+                    {
+                        var route = routes[i];
+                        if (EntityManager.TryGetComponent<Owner>(route.m_Waypoint, out var owner)
+                            && EntityManager.TryGetComponent<PrefabRef>(owner.m_Owner, out var prefabRef)
+                            && EntityManager.TryGetComponent<TransportLineData>(prefabRef.m_Prefab, out var lineData)
+                            && EntityManager.TryGetComponent<Game.Routes.Color>(owner.m_Owner, out var lineColor)
+                            && EntityManager.TryGetComponent<RouteNumber>(owner.m_Owner, out var lineNumber))
+                        {
+                            // Get line acronym - this needs to be done outside burst since it calls managed code
+                            var acronym = new FixedString32Bytes();
+                            // For now, we'll leave acronym empty in burst context
+                            // The acronym will need to be resolved outside of burst
+
+                            var descriptor = new LineDescriptor(
+                                owner.m_Owner,
+                                lineData.m_TransportType,
+                                lineData.m_CargoTransport,
+                                lineData.m_PassengerTransport,
+                                acronym,
+                                lineNumber.m_Number,
+                                lineColor.m_Color
+                            );
+
+                            Lines.Add(descriptor);
+                        }
+                    }
+                }
+            }
         }
     }
 }
