@@ -1,6 +1,7 @@
 using Belzont.Interfaces;
 using Belzont.Utils;
 using BridgeWE;
+using Colossal.Core;
 using Game;
 using Game.Modding;
 using Game.SceneFlow;
@@ -35,10 +36,8 @@ namespace WE_TFM
 
             if (GameManager.instance.modManager.TryGetExecutableAsset(this, out var asset))
                 LogUtils.DoInfoLog($"Current mod asset at {asset.path}");
-            if (!DoPatches())
-            {
-                LogUtils.DoErrorLog("Patches failed to be applied. Check if mod dependencies are installed!");
-            }
+
+            MainThreadDispatcher.RegisterUpdater(() => { DoPatches(); });
         }
         private bool DoPatches()
         {
