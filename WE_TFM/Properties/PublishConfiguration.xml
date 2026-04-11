@@ -7,7 +7,7 @@
 This is the WE Transport Formula Module (WE_TFM), formerly known as PlatformSwitcher. All references and code have been updated to reflect the new project name.</LongDescription>
   <Thumbnail Value="Properties/Thumbnail.png" />
   <ForumLink Value="" />
-  <ModVersion Value="0.0.0.2" />
+  <ModVersion Value="0.0.0.3" />
   <GameVersion Value="1.5.*" />
   <ChangeLog>**CHANGELOG**
 
