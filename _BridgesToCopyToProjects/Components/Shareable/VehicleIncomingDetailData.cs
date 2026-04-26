@@ -1,5 +1,4 @@
-﻿using [YourDll].Enums;
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 
 namespace [YourDll].Components.Shareable
 {
@@ -70,6 +69,18 @@ namespace [YourDll].Components.Shareable
                 }
             }
         }
+    }
+
+    
+    public enum VehicleStatusDescription
+    {
+        TrainOnPlatform,
+        BoardingNow,
+        PrepareForBoarding,
+        NextTrain,
+        DistanceToStation,
+        AverageWaitTime,
+        ClosedPlatform
     }
 
 }

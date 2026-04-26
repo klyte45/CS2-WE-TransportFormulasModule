@@ -27,5 +27,19 @@ namespace [YourDll].Components.Shareable
         public static bool operator ==(WaypointDestinationConnections left, WaypointDestinationConnections right) => left.Equals(right);
 
         public static bool operator !=(WaypointDestinationConnections left, WaypointDestinationConnections right) => !(left == right);
+        public enum TransportTypeByImportance : byte
+        {
+            MostPrioritary = 0x00,
+            Airplane = 0x80,
+            Ship = 0x90,
+            Ferry = 0x97,
+            Train = 0xA0,
+            Subway = 0xA8,
+            Tram = 0xC0,
+            Bus = 0xF0,
+            LessPrioritary = 0xFF
+        }
     }
+
+    
 }

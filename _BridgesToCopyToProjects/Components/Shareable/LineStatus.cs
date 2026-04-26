@@ -1,6 +1,5 @@
 ﻿using Game.Prefabs;
 using Game.Routes;
-using [YourDll].Enums;
 using System.Runtime.InteropServices;
 using Unity.Entities;
 
@@ -15,6 +14,15 @@ namespace [YourDll].Components.Shareable
         public int actualInterval;
         public bool isPassenger;
         public bool isCargo;
+
+        public enum LineOperationStatus
+        {
+            NormalOperation,
+            NotOperating,
+            OperationStopped,
+            ReducedSpeed,
+            NoUsage,
+        }
     }
 
 }
