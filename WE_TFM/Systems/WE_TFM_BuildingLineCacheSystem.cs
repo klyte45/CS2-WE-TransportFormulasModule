@@ -172,23 +172,23 @@ namespace WE_TFM.Systems
             }
 
             // Apply sorting
-            if (sortDescending)
-            {
-                filtered = [.. filtered.OrderByDescending(x => x.Number)];
-            }
-            else
-            {
-                filtered = [.. filtered.OrderBy(x => x.Number)];
-            }
+            filtered = sortDescending ? [.. filtered.OrderByDescending(x => x.Number)] : [.. filtered.OrderBy(x => x.Number)];
 
             return filtered;
         }
-        private List<TransportType> ParseTransportTypes(string lineType)
+        private readonly Dictionary<string, TransportType[]> TransportTypeParsingCache = [];
+        private TransportType[] ParseTransportTypes(string lineType)
         {
-            return [.. lineType.Split(',')
-                .Select(x => Enum.TryParse<TransportType>(x.Trim(), out var transportType) ? transportType as TransportType? : null)
+            if (lineType.Contains(" ")) return [];
+            if (!TransportTypeParsingCache.TryGetValue(lineType, out var cached))
+            {
+                cached = [.. lineType.Split(',')
+                .Select(x => Enum.TryParse<TransportType>(x, out var transportType) ? transportType as TransportType? : null)
                 .Where(x => x.HasValue)
                 .Select(x => x.Value)];
+                TransportTypeParsingCache[lineType] = cached;
+            }
+            return cached;
         }
         public LineDescriptor? GetLineByIndex(Entity buildingEntity, string lineType, int index, bool iterateToOwner, bool sortDescending = false)
         {
